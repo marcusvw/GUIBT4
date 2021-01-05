@@ -23,6 +23,7 @@ Button4Page::Button4Page(JsonObject obj, PAG_pos_t cp, bool paramUseSdCard)
         imageOff[x] = obj["imagesOff"][x].as<String>();
         itemId[x] = obj["ids"][x].as<String>();
         varOnly[x] = obj["varOnly"][x].as<bool>();
+        header = obj["head"].as<String>();
         if (paramUseSdCard)
         {
             fsHandler = &SD;
@@ -42,10 +43,28 @@ Button4Page::Button4Page(JsonObject obj, PAG_pos_t cp, bool paramUseSdCard)
     Serial.printf("BT4 INF Button page loaded\r\n");
 }
 
+/**
+ * Header Render function
+ * */
+void Button4Page::renderHeader(const char *string)
+{
+    canvas.setTextSize(1);
+    canvas.fillRect(3, 4, 316, 20, PAG_FOREGND);
+    canvas.setTextColor(0);
+    canvas.setTextDatum(TC_DATUM);
+    canvas.drawString(string, 160, 3, 4);
+}
+
 void Button4Page::activate()
 {
     active = true;
+#ifdef HW_M5PAPER
     canvas.fillCanvas(BLACK);
+#endif
+#ifdef HW_M5CORE2
+    canvas.fillScreen(BLACK);
+#endif
+
     PAG_pos_t pos;
     pos.y = -1;
     pos.x = -1;
@@ -76,6 +95,7 @@ void Button4Page::draw()
             canvas.drawBmpFile(*fsHandler, imageOff[x].c_str(), IMG_POS_X[x], IMG_POS_Y[x]);
         }
     }
+    renderHeader(header.c_str());
 #ifdef HW_M5PAPER
     canvas.pushCanvas(canvas_pos.x, canvas_pos.y, UPDATE_MODE_GC16);
 #endif

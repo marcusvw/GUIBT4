@@ -29,7 +29,7 @@ private:
     M5EPD_Canvas canvas = (&M5.EPD);
 #endif
 #ifdef HW_M5CORE2
-    M5Display canvas = (&M5.lcd);
+    #define canvas M5.Lcd
 #endif
 
     const uint16_t IMG_POS_X[BT4_NUM_BUT] = {60, 60, 163, 163};
@@ -39,6 +39,7 @@ private:
     uint32_t lastUpdate = 0;
     static bool isInArea(int xT, int yT, int x, int y, int sizeX, int sizeY);
     void redrawBt(uint8_t img);
+    void renderHeader(const char *string);
 
 public:
     Button4Page(JsonObject obj, PAG_pos_t cp, bool paramUseSdCard);
