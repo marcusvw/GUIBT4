@@ -68,7 +68,7 @@ void Button4Page::activate()
     PAG_pos_t pos;
     pos.y = -1;
     pos.x = -1;
-    handleInput(pos);
+    //handleInput(pos);
     draw();
 }
 void Button4Page::deActivate()
@@ -97,7 +97,14 @@ void Button4Page::draw()
     }
     renderHeader(header.c_str());
 #ifdef HW_M5PAPER
-    canvas.pushCanvas(canvas_pos.x, canvas_pos.y, UPDATE_MODE_GC16);
+    if (GUI_cachedUpdate())
+    {
+        canvas.pushCanvas(canvas_pos.x, canvas_pos.y, UPDATE_MODE_NONE);
+    }
+    else
+    {
+        canvas.pushCanvas(canvas_pos.x, canvas_pos.y, UPDATE_MODE_GC16);
+    }
 #endif
 }
 
